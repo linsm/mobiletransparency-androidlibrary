@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import at.jku.ins.mobiletransparency.MobileTransparencyClient;
 import at.jku.ins.mobiletransparency_sampleapp.databinding.FragmentFirstBinding;
 
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
+    private MobileTransparencyClient mobileTransparencyClient;
 
     @Override
     public View onCreateView(
