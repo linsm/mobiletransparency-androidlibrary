@@ -6,12 +6,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import at.jku.ins.mobiletransparency.InclusionProofCallback;
 import at.jku.ins.mobiletransparency.MobileTransparencyClient;
 import at.jku.ins.mobiletransparency.TransparencyCallback;
+import at.jku.ins.mobiletransparency.models.LogEntry;
 import at.jku.ins.mobiletransparency.models.Tree;
 import at.jku.ins.mobiletransparency.models.TreeInformation;
+import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProof;
 import at.jku.ins.mobiletransparency_sampleapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,6 +57,34 @@ public class MainActivity extends AppCompatActivity {
                 int i = 0;
             }
         });
+        MaterialButton inclusionProofButton = findViewById(R.id.inclusionProofButton);
+        inclusionProofButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextInputLayout treeSizeTextField = findViewById(R.id.treeSize);
+                int treeSize = Integer.parseInt(treeSizeTextField.getEditText().getText().toString());
 
+                TextInputLayout applicationIdField = findViewById(R.id.applicationId);
+                String applicationId = applicationIdField.getEditText().getText().toString();
+
+                TextInputLayout versionCodeField = findViewById(R.id.versionCode);
+                String versionCode = versionCodeField.getEditText().getText().toString();
+
+                TextInputLayout signatureDataField = findViewById(R.id.signatureData);
+                String signatureData = signatureDataField.getEditText().getText().toString();
+
+                mobileTransparencyClient.performInclusionProofOnLatestTreeHead(Long.parseLong(selectedTreeId), treeSize, new LogEntry(applicationId, versionCode, signatureData), new InclusionProofCallback() {
+                    @Override
+                    public void onSuccess(InclusionProof inclusionProof) {
+                        int i = 0;
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
+            }
+        });
     }
 }

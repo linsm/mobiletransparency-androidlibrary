@@ -1,4 +1,4 @@
-package at.jku.ins.mobiletransparency.models;
+package at.jku.ins.mobiletransparency.models.inclusionproof;
 
 import com.google.gson.annotations.Expose;
 
@@ -13,5 +13,4 @@ public class SignedLogRoot {
     public String getLogRoot() {
         return logRoot;
     }
-
 }

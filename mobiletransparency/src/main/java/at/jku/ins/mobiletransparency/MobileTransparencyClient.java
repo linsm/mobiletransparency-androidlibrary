@@ -1,6 +1,9 @@
 package at.jku.ins.mobiletransparency;
 
+import android.os.Build;
 import android.os.Handler;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.IOException;
 import java.net.URL;
@@ -12,10 +15,11 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import at.jku.ins.mobiletransparency.models.InclusionProof;
+import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProof;
 import at.jku.ins.mobiletransparency.models.LogEntry;
 import at.jku.ins.mobiletransparency.models.Tree;
 import at.jku.ins.mobiletransparency.models.TreeInformation;
+import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProofRequest;
 import okhttp3.HttpUrl;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,9 +42,21 @@ public class MobileTransparencyClient {
         transparencyService = retrofitClient.create(ITransparencyService.class);
     }
 
-    public boolean performInclusionProofOnLatestTreeHead(LogEntry logEntry) {
-        //transparencyService.getInclusionProof()
-        return true;
+    public void performInclusionProofOnLatestTreeHead(long treeId, int treeSize, LogEntry logEntry, InclusionProofCallback callback) {
+        transparencyService.getInclusionProof(treeId, treeSize, logEntry).enqueue(new Callback<InclusionProof>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(Call<InclusionProof> call, Response<InclusionProof> response) {
+                callback.onSuccess(response.body());
+                    String leafValueHash = logEntry.getMerkleLeafHash();
+                    TransparencyService service = new TransparencyService();
+                    service.validateInclusionProof("", leafValueHash, treeSize, response.body());
+            }
+            @Override
+            public void onFailure(Call<InclusionProof> call, Throwable t) {
+
+            }
+        });
     }
 
     public void getAvailableTrees(TransparencyCallback callback) {
