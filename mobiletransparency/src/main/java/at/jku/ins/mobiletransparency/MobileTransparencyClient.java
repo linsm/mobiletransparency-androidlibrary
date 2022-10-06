@@ -1,3 +1,9 @@
+// Copyright (c) 2022 Mario Lins <mario.lins@ins.jku.at>
+//
+// Licensed under the EUPL, Version 1.2.
+//
+// You may obtain a copy of the Licence at:
+// https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
 package at.jku.ins.mobiletransparency;
 
 import android.os.Build;
@@ -50,7 +56,7 @@ public class MobileTransparencyClient {
                 callback.onSuccess(response.body());
                     String leafValueHash = logEntry.getMerkleLeafHash();
                     TransparencyService service = new TransparencyService();
-                    service.validateInclusionProof("", leafValueHash, treeSize, response.body());
+                    service.validateInclusionProof(leafValueHash, treeSize, response.body());
             }
             @Override
             public void onFailure(Call<InclusionProof> call, Throwable t) {

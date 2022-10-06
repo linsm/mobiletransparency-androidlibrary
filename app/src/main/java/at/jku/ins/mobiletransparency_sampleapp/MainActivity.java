@@ -1,3 +1,9 @@
+// Copyright (c) 2022 Mario Lins <mario.lins@ins.jku.at>
+//
+// Licensed under the EUPL, Version 1.2.
+//
+// You may obtain a copy of the Licence at:
+// https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
 package at.jku.ins.mobiletransparency_sampleapp;
 
 import android.os.Bundle;
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        mobileTransparencyClient = new MobileTransparencyClient("https://10.0.2.2:8001");
+        mobileTransparencyClient = new MobileTransparencyClient("INSERTIPOFPERSONALITY");
         mobileTransparencyClient.getAvailableTrees(new TransparencyCallback() {
             @Override
             public void onSuccess(Tree treeInformation) {
@@ -76,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 mobileTransparencyClient.performInclusionProofOnLatestTreeHead(Long.parseLong(selectedTreeId), treeSize, new LogEntry(applicationId, versionCode, signatureData), new InclusionProofCallback() {
                     @Override
                     public void onSuccess(InclusionProof inclusionProof) {
-                        int i = 0;
+                            
                     }
 
                     @Override
