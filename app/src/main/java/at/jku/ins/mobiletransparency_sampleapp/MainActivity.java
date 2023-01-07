@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        mobileTransparencyClient = new MobileTransparencyClient("INSERTIPOFPERSONALITY");
+        mobileTransparencyClient = new MobileTransparencyClient("https://192.168.56.20:8443");
         mobileTransparencyClient.getAvailableTrees(new TransparencyCallback() {
             @Override
             public void onSuccess(Tree treeInformation) {
