@@ -19,9 +19,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
-import at.jku.ins.mobiletransparency.models.inclusionproof.ConsistencyProof;
-import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProof;
-import at.jku.ins.mobiletransparency.models.inclusionproof.Proof;
+import at.jku.ins.mobiletransparency.models.ConsistencyProof;
+import at.jku.ins.mobiletransparency.models.InclusionProof;
+import at.jku.ins.mobiletransparency.models.Proof;
 
 public class TransparencyService {
 

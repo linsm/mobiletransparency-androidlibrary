@@ -25,7 +25,7 @@ import at.jku.ins.mobiletransparency.TransparencyCallback;
 import at.jku.ins.mobiletransparency.models.LogEntry;
 import at.jku.ins.mobiletransparency.models.Tree;
 import at.jku.ins.mobiletransparency.models.TreeInformation;
-import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProof;
+import at.jku.ins.mobiletransparency.models.InclusionProof;
 import at.jku.ins.mobiletransparency_sampleapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

@@ -6,7 +6,7 @@
 // https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
 package at.jku.ins.mobiletransparency;
 
-import at.jku.ins.mobiletransparency.models.inclusionproof.ConsistencyProof;
+import at.jku.ins.mobiletransparency.models.ConsistencyProof;
 
 public interface ConsistencyProofCallback {
     void onSuccess(ConsistencyProof consistencyProof);

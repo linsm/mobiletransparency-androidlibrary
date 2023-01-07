@@ -4,7 +4,7 @@
 //
 // You may obtain a copy of the Licence at:
 // https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
-package at.jku.ins.mobiletransparency.models.inclusionproof;
+package at.jku.ins.mobiletransparency.models;
 
 import com.google.gson.annotations.Expose;
 

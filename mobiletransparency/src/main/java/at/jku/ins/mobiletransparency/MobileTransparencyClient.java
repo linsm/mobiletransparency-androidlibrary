@@ -6,29 +6,15 @@
 // https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
 package at.jku.ins.mobiletransparency;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
-import android.os.Handler;
 
 import androidx.annotation.RequiresApi;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import at.jku.ins.mobiletransparency.models.inclusionproof.ConsistencyProof;
-import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProof;
+import at.jku.ins.mobiletransparency.models.ConsistencyProof;
+import at.jku.ins.mobiletransparency.models.InclusionProof;
 import at.jku.ins.mobiletransparency.models.LogEntry;
 import at.jku.ins.mobiletransparency.models.Tree;
-import at.jku.ins.mobiletransparency.models.TreeInformation;
-import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProofRequest;
 import okhttp3.HttpUrl;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,34 +56,26 @@ public class MobileTransparencyClient {
     }
 
     public void performConsistencyProofOnLatestTreeHead(Context applicationContext, long treeId, ConsistencyProofCallback callback) {
-
-
-
         String trustedRootNode = transparencyService.getStoredRootNode(applicationContext);
         if(trustedRootNode == "") //TOFU
         {
-
             return;
         }
-
-
-        remoteTransparencyService.getConsistencyProof(treeId, firstTreeSize, secondTreeSize).enqueue(new Callback<ConsistencyProof>() {
+        /*remoteTransparencyService.getConsistencyProof(treeId, firstTreeSize, secondTreeSize).enqueue(new Callback<ConsistencyProof>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Call<ConsistencyProof> call, Response<ConsistencyProof> response) {
                 callback.onSuccess(response.body());
 
-                transparencyService.validateConsistencyProof(response.body());
+                //transparencyService.validateConsistencyProof(response.body());
             }
 
             @Override
             public void onFailure(Call<ConsistencyProof> call, Throwable t) {
 
             }
-        });
-
+        });*/
     }
-
-
 
     public void getAvailableTrees(TransparencyCallback callback) {
         remoteTransparencyService.listTrees().enqueue(new Callback<Tree>() {
@@ -105,7 +83,6 @@ public class MobileTransparencyClient {
             public void onResponse(Call<Tree> call, Response<Tree> response) {
                 callback.onSuccess(response.body());
             }
-
             @Override
             public void onFailure(Call<Tree> call, Throwable t) {
                 callback.onFailure();
