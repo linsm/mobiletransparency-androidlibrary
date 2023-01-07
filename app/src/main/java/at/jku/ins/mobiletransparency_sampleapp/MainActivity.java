@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 mobileTransparencyClient.performInclusionProofOnLatestTreeHead(Long.parseLong(selectedTreeId), treeSize, new LogEntry(applicationId, versionCode, signatureData), new InclusionProofCallback() {
                     @Override
                     public void onSuccess(InclusionProof inclusionProof) {
-                            
+
                     }
 
                     @Override

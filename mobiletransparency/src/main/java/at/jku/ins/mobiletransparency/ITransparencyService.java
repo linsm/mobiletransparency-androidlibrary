@@ -8,6 +8,7 @@ package at.jku.ins.mobiletransparency;
 
 import at.jku.ins.mobiletransparency.models.LogEntry;
 import at.jku.ins.mobiletransparency.models.Tree;
+import at.jku.ins.mobiletransparency.models.inclusionproof.ConsistencyProof;
 import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProof;
 import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProofRequest;
 import retrofit2.Call;
@@ -22,6 +23,10 @@ public interface ITransparencyService {
     @POST("Log/InclusionProof")
     Call<InclusionProof> getInclusionProof(@Query("treeId")long treeId, @Query("treeSize") int treeSize,
                                            @Body LogEntry logToVerify);
+
+    @POST("Log/ConsistencyProof")
+    Call<ConsistencyProof> getConsistencyProof(@Query("treeId")long treeId, @Query("firstTreeSize") int firstTreeSize,
+                                             @Query("secondTreeSize") int secondTreeSize);
 
     @GET("Admin/ListTrees")
     Call<Tree> listTrees();

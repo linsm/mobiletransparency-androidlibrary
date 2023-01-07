@@ -6,6 +6,8 @@
 // https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
 package at.jku.ins.mobiletransparency;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Base64;
 
@@ -17,10 +19,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
+import at.jku.ins.mobiletransparency.models.inclusionproof.ConsistencyProof;
 import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProof;
 import at.jku.ins.mobiletransparency.models.inclusionproof.Proof;
 
 public class TransparencyService {
+
+    private final String preferenceStore = "LocalRootNode";
+    private final String trustedRootNodeKey = "latestTrustedRootNode";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean validateInclusionProof(String merkleLeafHash, int treeSize, InclusionProof inclusionProof) {
@@ -29,6 +35,33 @@ public class TransparencyService {
         String calculatedRootHash = calculateRootNode(proof.getLeafIndex(), merkleLeafHash, treeSize, hashes);
         String claimedRootHash = getRootNodeHash(inclusionProof.getSignedLogRoot().getLogRoot());
         return claimedRootHash == calculatedRootHash;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean validateConsistencyProof(String currentRootNode, ConsistencyProof consistencyProof) {
+        Proof proof = consistencyProof.getProofList().get(0);
+        List<String> hashes = proof.getHashes();
+
+        // First verify if first two hashes matches current root node
+        String test = calculateInnerNode(hashes.get(0), hashes.get(1));
+        boolean isValid = false;
+        isValid = test == currentRootNode;
+
+        // Second verify if calculated root node matches claimed root node
+
+
+        return isValid;
+    }
+
+    public String getStoredRootNode(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(preferenceStore,Context.MODE_PRIVATE);
+        return sharedPref.getString(trustedRootNodeKey, "");
+    }
+
+    public void saveLatestTreeHead(Context context, String latestTreeHead) {
+        SharedPreferences sharedPref = context.getSharedPreferences(preferenceStore,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(trustedRootNodeKey, latestTreeHead);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

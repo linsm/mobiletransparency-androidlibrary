@@ -6,6 +6,8 @@
 // https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
 package at.jku.ins.mobiletransparency;
 
+import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 
@@ -21,6 +23,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import at.jku.ins.mobiletransparency.models.inclusionproof.ConsistencyProof;
 import at.jku.ins.mobiletransparency.models.inclusionproof.InclusionProof;
 import at.jku.ins.mobiletransparency.models.LogEntry;
 import at.jku.ins.mobiletransparency.models.Tree;
@@ -36,7 +39,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MobileTransparencyClient {
 
     private static Retrofit retrofitClient = null;
-    private ITransparencyService transparencyService;
+    private ITransparencyService remoteTransparencyService;
+    private TransparencyService transparencyService;
 
     public MobileTransparencyClient(String personalityAddress) {
         HttpUrl url = HttpUrl.parse(personalityAddress);
@@ -45,18 +49,18 @@ public class MobileTransparencyClient {
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory
                         .create()).build();
-        transparencyService = retrofitClient.create(ITransparencyService.class);
+        remoteTransparencyService = retrofitClient.create(ITransparencyService.class);
+        transparencyService = new TransparencyService();
     }
 
     public void performInclusionProofOnLatestTreeHead(long treeId, int treeSize, LogEntry logEntry, InclusionProofCallback callback) {
-        transparencyService.getInclusionProof(treeId, treeSize, logEntry).enqueue(new Callback<InclusionProof>() {
+        remoteTransparencyService.getInclusionProof(treeId, treeSize, logEntry).enqueue(new Callback<InclusionProof>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Call<InclusionProof> call, Response<InclusionProof> response) {
                 callback.onSuccess(response.body());
                     String leafValueHash = logEntry.getMerkleLeafHash();
-                    TransparencyService service = new TransparencyService();
-                    service.validateInclusionProof(leafValueHash, treeSize, response.body());
+                transparencyService.validateInclusionProof(leafValueHash, treeSize, response.body());
             }
             @Override
             public void onFailure(Call<InclusionProof> call, Throwable t) {
@@ -65,8 +69,38 @@ public class MobileTransparencyClient {
         });
     }
 
+    public void performConsistencyProofOnLatestTreeHead(Context applicationContext, long treeId, ConsistencyProofCallback callback) {
+
+
+
+        String trustedRootNode = transparencyService.getStoredRootNode(applicationContext);
+        if(trustedRootNode == "") //TOFU
+        {
+
+            return;
+        }
+
+
+        remoteTransparencyService.getConsistencyProof(treeId, firstTreeSize, secondTreeSize).enqueue(new Callback<ConsistencyProof>() {
+            @Override
+            public void onResponse(Call<ConsistencyProof> call, Response<ConsistencyProof> response) {
+                callback.onSuccess(response.body());
+
+                transparencyService.validateConsistencyProof(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ConsistencyProof> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
+
     public void getAvailableTrees(TransparencyCallback callback) {
-        transparencyService.listTrees().enqueue(new Callback<Tree>() {
+        remoteTransparencyService.listTrees().enqueue(new Callback<Tree>() {
             @Override
             public void onResponse(Call<Tree> call, Response<Tree> response) {
                 callback.onSuccess(response.body());
