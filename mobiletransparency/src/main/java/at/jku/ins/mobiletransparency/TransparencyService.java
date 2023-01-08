@@ -22,6 +22,7 @@ import java.util.List;
 import at.jku.ins.mobiletransparency.models.ConsistencyProof;
 import at.jku.ins.mobiletransparency.models.InclusionProof;
 import at.jku.ins.mobiletransparency.models.Proof;
+import at.jku.ins.mobiletransparency.models.ValidationResult;
 
 public class TransparencyService {
 
@@ -29,12 +30,14 @@ public class TransparencyService {
     private final String trustedRootNodeKey = "latestTrustedRootNode";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean validateInclusionProof(String merkleLeafHash, int treeSize, InclusionProof inclusionProof) {
+    public ValidationResult validateInclusionProof(String merkleLeafHash, int treeSize, InclusionProof inclusionProof) {
         Proof proof = inclusionProof.getProofList().get(0);
         List<String> hashes = proof.getHashes();
         String calculatedRootHash = calculateRootNode(proof.getLeafIndex(), merkleLeafHash, treeSize, hashes);
         String claimedRootHash = getRootNodeHash(inclusionProof.getSignedLogRoot().getLogRoot());
-        return claimedRootHash == calculatedRootHash;
+        //return claimedRootHash == calculatedRootHash;
+        ValidationResult result = new ValidationResult(calculatedRootHash, claimedRootHash);
+        return result;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

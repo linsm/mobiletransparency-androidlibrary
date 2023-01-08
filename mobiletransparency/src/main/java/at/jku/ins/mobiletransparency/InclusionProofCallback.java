@@ -7,8 +7,9 @@
 package at.jku.ins.mobiletransparency;
 
 import at.jku.ins.mobiletransparency.models.InclusionProof;
+import at.jku.ins.mobiletransparency.models.ValidationResult;
 
 public interface InclusionProofCallback {
-    void onSuccess(InclusionProof inclusionProof);
+    void onSuccess(ValidationResult validationResult);
     void onFailure();
 }

@@ -13,5 +13,5 @@ import at.jku.ins.mobiletransparency.models.TreeInformation;
 
 public interface TransparencyCallback {
     void onSuccess(Tree treeInformation);
-    void onFailure();
+    void onFailure(String exception);
 }

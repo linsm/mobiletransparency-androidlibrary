@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import at.jku.ins.mobiletransparency.models.LogEntry;
 import at.jku.ins.mobiletransparency.models.Tree;
 import at.jku.ins.mobiletransparency.models.TreeInformation;
 import at.jku.ins.mobiletransparency.models.InclusionProof;
+import at.jku.ins.mobiletransparency.models.ValidationResult;
 import at.jku.ins.mobiletransparency_sampleapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,8 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
             @Override
-            public void onFailure() {
-                int i = 0;
+            public void onFailure(String message) {
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.treeIdAutoComplete), message, Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         });
         MaterialButton inclusionProofButton = findViewById(R.id.inclusionProofButton);
@@ -81,13 +85,17 @@ public class MainActivity extends AppCompatActivity {
 
                 mobileTransparencyClient.performInclusionProofOnLatestTreeHead(Long.parseLong(selectedTreeId), treeSize, new LogEntry(applicationId, versionCode, signatureData), new InclusionProofCallback() {
                     @Override
-                    public void onSuccess(InclusionProof inclusionProof) {
-
+                    public void onSuccess(ValidationResult result) {
+                        Snackbar snackbar = Snackbar
+                                .make(v, "Expected root hash: " + result.getExpectedRootHash() + "\n Claimed root hash: " + result.getClaimedRootHash(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
 
                     @Override
                     public void onFailure() {
-
+                        Snackbar snackbar = Snackbar
+                                .make(v, "Inclusion proof failure", Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
                 });
             }

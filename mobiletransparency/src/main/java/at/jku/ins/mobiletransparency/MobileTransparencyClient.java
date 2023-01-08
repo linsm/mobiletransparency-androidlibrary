@@ -15,6 +15,7 @@ import at.jku.ins.mobiletransparency.models.ConsistencyProof;
 import at.jku.ins.mobiletransparency.models.InclusionProof;
 import at.jku.ins.mobiletransparency.models.LogEntry;
 import at.jku.ins.mobiletransparency.models.Tree;
+import at.jku.ins.mobiletransparency.models.ValidationResult;
 import okhttp3.HttpUrl;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,9 +45,9 @@ public class MobileTransparencyClient {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Call<InclusionProof> call, Response<InclusionProof> response) {
-                callback.onSuccess(response.body());
-                    String leafValueHash = logEntry.getMerkleLeafHash();
-                transparencyService.validateInclusionProof(leafValueHash, treeSize, response.body());
+                String leafValueHash = logEntry.getMerkleLeafHash();
+                ValidationResult result = transparencyService.validateInclusionProof(leafValueHash, treeSize, response.body());
+                callback.onSuccess(result);
             }
             @Override
             public void onFailure(Call<InclusionProof> call, Throwable t) {
@@ -85,7 +86,7 @@ public class MobileTransparencyClient {
             }
             @Override
             public void onFailure(Call<Tree> call, Throwable t) {
-                callback.onFailure();
+                callback.onFailure(t.getMessage());
             }
         });
     }
