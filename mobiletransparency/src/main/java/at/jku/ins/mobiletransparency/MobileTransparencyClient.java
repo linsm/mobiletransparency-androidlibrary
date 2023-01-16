@@ -51,6 +51,7 @@ public class MobileTransparencyClient {
             }
             @Override
             public void onFailure(Call<InclusionProof> call, Throwable t) {
+                int i = 0;
 
             }
         });

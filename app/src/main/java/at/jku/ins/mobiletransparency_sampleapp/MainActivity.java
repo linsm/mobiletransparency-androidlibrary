@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        mobileTransparencyClient = new MobileTransparencyClient("https://192.168.5.109:8443");
+        mobileTransparencyClient = new MobileTransparencyClient("https://10.0.2.2:8443");
         mobileTransparencyClient.getAvailableTrees(new TransparencyCallback() {
             @Override
             public void onSuccess(Tree treeInformation) {
