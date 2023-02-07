@@ -26,7 +26,7 @@ public interface ITransparencyService {
     Call<ConsistencyProof> getConsistencyProof(@Query("treeId")long treeId, @Query("firstTreeSize") int firstTreeSize,
                                              @Query("secondTreeSize") int secondTreeSize);
 
-    @GET("Admin/ListTrees")
+    @GET("Log/ListTrees")
     Call<Tree> listTrees();
 
 }

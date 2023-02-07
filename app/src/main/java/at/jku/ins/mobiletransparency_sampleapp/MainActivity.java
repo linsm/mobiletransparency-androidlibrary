@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        mobileTransparencyClient = new MobileTransparencyClient("https://10.0.2.2:8443");
+        mobileTransparencyClient = new MobileTransparencyClient("<ENTER_YOUR_PERSONALITY_ADDRESS>");
         mobileTransparencyClient.getAvailableTrees(new TransparencyCallback() {
             @Override
             public void onSuccess(Tree treeInformation) {
@@ -82,10 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
                 TextInputLayout signatureDataField = findViewById(R.id.signatureData);
                 String signatureData = signatureDataField.getEditText().getText().toString();
-
+                long start_time = System.currentTimeMillis();
                 mobileTransparencyClient.performInclusionProofOnLatestTreeHead(Long.parseLong(selectedTreeId), treeSize, new LogEntry(applicationId, versionCode, signatureData), new InclusionProofCallback() {
                     @Override
                     public void onSuccess(ValidationResult result) {
+                        long end_time = System.currentTimeMillis();
+                        long elapse = end_time - start_time;
                         Snackbar snackbar = Snackbar
                                 .make(v, "Expected root hash: " + result.getExpectedRootHash() + "\n Claimed root hash: " + result.getClaimedRootHash(), Snackbar.LENGTH_LONG);
                         snackbar.show();
