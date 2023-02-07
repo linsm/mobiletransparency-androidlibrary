@@ -57,26 +57,24 @@ public class MobileTransparencyClient {
         });
     }
 
-    public void performConsistencyProofOnLatestTreeHead(Context applicationContext, long treeId, ConsistencyProofCallback callback) {
+    public void performConsistencyProofOnLatestTreeHead(Context applicationContext, long treeId, int firstTreeSize, int secondTreeSize, ConsistencyProofCallback callback) {
         String trustedRootNode = transparencyService.getStoredRootNode(applicationContext);
         if(trustedRootNode == "") //TOFU
         {
             return;
         }
-        /*remoteTransparencyService.getConsistencyProof(treeId, firstTreeSize, secondTreeSize).enqueue(new Callback<ConsistencyProof>() {
+        remoteTransparencyService.getConsistencyProof(treeId, firstTreeSize, secondTreeSize).enqueue(new Callback<ConsistencyProof>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Call<ConsistencyProof> call, Response<ConsistencyProof> response) {
                 callback.onSuccess(response.body());
-
                 //transparencyService.validateConsistencyProof(response.body());
             }
-
             @Override
             public void onFailure(Call<ConsistencyProof> call, Throwable t) {
 
             }
-        });*/
+        });
     }
 
     public void getAvailableTrees(TransparencyCallback callback) {
